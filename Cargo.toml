@@ -1,0 +1,15 @@
+[package]
+name = "morejpeg"
+version = "0.1.0"
+authors = ["Dax Fohl <dax.fohl@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-std = { varsion = "1.7.0", features = ["attributes"] }
+liquid = "0.21.4"
+log = "0.4.11"
+pretty_env_logger = "0.4.0"
+thiserror = "1.0.22"
+tide = "0.15.0"
