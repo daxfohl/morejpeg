@@ -1,5 +1,5 @@
 use async_std::{sync::Arc, sync::Mutex};
-use std::{clone::Clone, error::Error, str::FromStr};
+use std::{clone::Clone, process::Command, error::Error, str::FromStr, io::{self, Write}};
 use tide::{http::Mime, Response, StatusCode, Request};
 
 
@@ -24,6 +24,14 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     app.at("/").get(|req: Request<State>| async move {
         log::info!("Serving /");
+        let output = Command::new("docker")
+                             .arg("run")
+                             .arg("hello-world")
+                             .output()
+                             .expect("failed docker");
+        log::info!("status {}", output.status);
+        io::stderr().write_all(&output.stderr).unwrap();
+        io::stdout().write_all(&output.stdout).unwrap();
         serve_template(req.state()).await.map_err(|e| {
             log::error!("While serving: {}", e);
             tide::Error::from_str(StatusCode::InternalServerError, "fail!",)
